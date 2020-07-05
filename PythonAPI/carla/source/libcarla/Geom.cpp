@@ -86,6 +86,22 @@ static void TransformList(const carla::geom::Transform &self, boost::python::lis
   }
 }
 
+static boost::python::list BuildMatrix(const std::array<float, 16> &m) {
+  boost::python::list r_out;
+  boost::python::list r[4];
+  for (uint8_t i = 0; i < 16; ++i) { r[uint8_t(i / 4)].append(m[i]); }
+  for (uint8_t i = 0; i < 4; ++i) { r_out.append(r[i]); }
+  return r_out;
+}
+
+static auto GetTransformMatrix(const carla::geom::Transform &self) {
+  return BuildMatrix(self.GetMatrix());
+}
+
+static auto GetInverseTransformMatrix(const carla::geom::Transform &self) {
+  return BuildMatrix(self.GetInverseMatrix());
+}
+
 void export_geom() {
   using namespace boost::python;
   namespace cg = carla::geom;
@@ -155,6 +171,8 @@ void export_geom() {
     .def_readwrite("yaw", &cg::Rotation::yaw)
     .def_readwrite("roll", &cg::Rotation::roll)
     .def("get_forward_vector", &cg::Rotation::GetForwardVector)
+    .def("get_right_vector", &cg::Rotation::GetRightVector)
+    .def("get_up_vector", &cg::Rotation::GetUpVector)
     .def("__eq__", &cg::Rotation::operator==)
     .def("__ne__", &cg::Rotation::operator!=)
     .def(self_ns::str(self_ns::self))
@@ -171,6 +189,10 @@ void export_geom() {
       return location;
     }, arg("in_point"))
     .def("get_forward_vector", &cg::Transform::GetForwardVector)
+    .def("get_right_vector", &cg::Transform::GetRightVector)
+    .def("get_up_vector", &cg::Transform::GetUpVector)
+    .def("get_matrix", &GetTransformMatrix)
+    .def("get_inverse_matrix", &GetInverseTransformMatrix)
     .def("__eq__", &cg::Transform::operator==)
     .def("__ne__", &cg::Transform::operator!=)
     .def(self_ns::str(self_ns::self))

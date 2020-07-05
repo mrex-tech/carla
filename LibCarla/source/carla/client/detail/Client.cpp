@@ -145,10 +145,6 @@ namespace detail {
     _pimpl->CallAndWait<void>("load_new_episode", std::move(map_name));
   }
 
-  bool Client::CheckIntermediateEpisode() {
-    return _pimpl->CallAndWait<bool>("check_intermediate_episode");
-  }
-
   void Client::CopyOpenDriveToServer(std::string opendrive, const rpc::OpendriveGenerationParameters & params) {
     // Await response, we need to be sure in this one.
     _pimpl->CallAndWait<void>("copy_opendrive_to_file", std::move(opendrive), params);
@@ -219,7 +215,7 @@ namespace detail {
   void Client::SetLightStateToVehicle(
       rpc::ActorId vehicle,
       const rpc::VehicleLightState &light_state) {
-    return _pimpl->AsyncCall("apply_vehicle_light_state", vehicle, light_state);
+    return _pimpl->AsyncCall("set_vehicle_light_state", vehicle, light_state);
   }
 
   rpc::Actor Client::SpawnActor(
@@ -315,13 +311,17 @@ namespace detail {
     _pimpl->AsyncCall("freeze_traffic_light", traffic_light, freeze);
   }
 
+  rpc::VehicleLightStateList Client::GetVehiclesLightStates() {
+    return _pimpl->CallAndWait<std::vector<std::pair<carla::ActorId, uint32_t>>>("get_vehicle_light_states");
+  }
+
   std::vector<ActorId> Client::GetGroupTrafficLights(rpc::ActorId traffic_light) {
     using return_t = std::vector<ActorId>;
     return _pimpl->CallAndWait<return_t>("get_group_traffic_lights", traffic_light);
   }
 
-  std::string Client::StartRecorder(std::string name) {
-    return _pimpl->CallAndWait<std::string>("start_recorder", name);
+  std::string Client::StartRecorder(std::string name, bool additional_data) {
+    return _pimpl->CallAndWait<std::string>("start_recorder", name, additional_data);
   }
 
   void Client::StopRecorder() {
