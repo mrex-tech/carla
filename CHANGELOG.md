@@ -15,6 +15,7 @@
   * Added PythonAPI `carla.world.get_vehicles_light_states` to get all the car light states at once
   * OpenDRIVE ingestion bugfixes
   * Improved the LiDAR and Radar sensors with a parallel implentation of the raycasting
+  * Added an approximation of the intensity of each point of the cloud in the LiDAR sensor.
   * Added Dynamic Vision Sensor (DVS) camera based on ESIM simulation http://rpg.ifi.uzh.ch/esim.html
   * Improved LiDAR and radar to better match the shape of the vehicles
   * Added support for additional TraCI clients in Sumo co-simulation
@@ -24,8 +25,10 @@
   * Improved mesh split in standalone mode
   * Fixed delay in the tcp communication from server to client, improving performance in synchronous mode in linux systems
   * Fixed large RAM usage when loading polinomial geometry from OpenDRIVE
-  * Fixed collision issues when debug draw(debug.draw_line) is called 
+  * Fixed collision issues when debug draw(debug.draw_line) is called
   * Fixed Gyroscope sensor to properly give angular velocity readings in local frame
+  * Added Renderdoc plugin to the Unreal project.
+  * Replace deprectated `platform.dist()` with recommended `distro.linux_distribution()`
 
 ## CARLA 0.9.9
 
