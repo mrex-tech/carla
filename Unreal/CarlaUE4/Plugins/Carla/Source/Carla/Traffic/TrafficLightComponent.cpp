@@ -68,6 +68,7 @@ void UTrafficLightComponent::GenerateTrafficLightBox(const FTransform BoxTransfo
 {
   UBoxComponent* BoxComponent = GenerateTriggerBox(BoxTransform, BoxSize);
   BoxComponent->OnComponentBeginOverlap.AddDynamic(this, &UTrafficLightComponent::OnOverlapTriggerBox);
+  AddEffectTriggerVolume(BoxComponent);
 }
 
 void UTrafficLightComponent::SetLightState(ETrafficLightState NewState)
@@ -77,6 +78,11 @@ void UTrafficLightComponent::SetLightState(ETrafficLightState NewState)
   if (GetOwner()->Implements<UTrafficLightInterface>())
   {
     ITrafficLightInterface::Execute_LightChanged(GetOwner(), LightState);
+  }
+  ATrafficLightBase* OldTrafficLight = Cast<ATrafficLightBase>(GetOwner());
+  if (OldTrafficLight)
+  {
+    OldTrafficLight->LightChangedCompatibility(NewState);
   }
 
   for (auto Controller : Vehicles)
@@ -103,18 +109,28 @@ ETrafficLightState UTrafficLightComponent::GetLightState() const
 
 void UTrafficLightComponent::SetFrozenGroup(bool InFreeze)
 {
-  if (TrafficLightGroup)
+  if (GetGroup())
   {
-    TrafficLightGroup->SetFrozenGroup(InFreeze);
+    GetGroup()->SetFrozenGroup(InFreeze);
   }
 }
 
 ATrafficLightGroup* UTrafficLightComponent::GetGroup()
 {
-  return TrafficLightGroup;
+  return TrafficLightController->GetGroup();
+}
+
+const ATrafficLightGroup* UTrafficLightComponent::GetGroup() const
+{
+  return TrafficLightController->GetGroup();
 }
 
 UTrafficLightController* UTrafficLightComponent::GetController()
+{
+  return TrafficLightController;
+}
+
+const UTrafficLightController* UTrafficLightComponent::GetController() const
 {
   return TrafficLightController;
 }
@@ -142,4 +158,9 @@ void UTrafficLightComponent::OnOverlapTriggerBox(UPrimitiveComponent *Overlapped
       }
     }
   }
+}
+
+void UTrafficLightComponent::SetController(UTrafficLightController* Controller)
+{
+  TrafficLightController = Controller;
 }

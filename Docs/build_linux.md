@@ -46,7 +46,9 @@ pip3 install --user setuptools
 # Additional dependencies for previous Ubuntu versions. 
 sudo apt-get install build-essential clang-8 lld-8 g++-7 cmake ninja-build libvulkan1 python python-pip python-dev python3-dev python3-pip libpng16-dev libtiff5-dev libjpeg-dev tzdata sed curl unzip autoconf libtool rsync libxml2-dev &&
 pip2 install --user setuptools &&
-pip3 install --user setuptools 
+pip3 install --user setuptools &&
+pip2 install --user distro &&
+pip3 install --user distro
 
 # Change default clang version.
 sudo update-alternatives --install /usr/bin/clang++ clang++ /usr/lib/llvm-8/bin/clang++ 180 &&
@@ -94,7 +96,7 @@ python3 spawn_npc.py
 
 ### System specifics
 
-* __Ubuntu 18.04.__ Since release 0.9.9, CARLA cannot run in Ubuntu 16.04 using default compilers.  
+* __Ubuntu 18.04.__ CARLA provides support for previous Ubuntu versions up to 16.04. **However** proper compilers are needed for UE to work properly. The required dependencies for both Ubuntu 18.04 and previous versions are listed below. Make sure to install the ones corresponding to the system.  
 * __30GB disk space.__ Installing all the software needed and CARLA itself will require quite a lot of space, especially Unreal Engine. Make sure to have around 30/50GB of free disk space.  
 * __An adequate GPU.__ CARLA aims for realistic simulations, so the server needs at least a 4GB GPU. A dedicated GPU is highly recommended for machine learning.  
 * __Two TCP ports and good internet connection.__ 2000 and 2001 by default. Be sure neither the firewall nor any other application block these.  
@@ -120,13 +122,17 @@ __Ubuntu 18.04__.
 ```sh
 sudo apt-get install build-essential clang-8 lld-8 g++-7 cmake ninja-build libvulkan1 python python-pip python-dev python3-dev python3-pip libpng-dev libtiff5-dev libjpeg-dev tzdata sed curl unzip autoconf libtool rsync libxml2-dev &&
 pip2 install --user setuptools &&
-pip3 install --user setuptools 
+pip3 install --user setuptools &&
+pip2 install --user distro &&
+pip3 install --user distro
 ```
 __Previous Ubuntu__ versions. 
 ```sh
 sudo apt-get install build-essential clang-8 lld-8 g++-7 cmake ninja-build libvulkan1 python python-pip python-dev python3-dev python3-pip libpng16-dev libtiff5-dev libjpeg-dev tzdata sed curl unzip autoconf libtool rsync libxml2-dev &&
 pip2 install --user setuptools &&
-pip3 install --user setuptools 
+pip3 install --user setuptools && 
+pip2 install --user distro &&
+pip3 install --user distro
 ```
 
 To avoid compatibility issues between Unreal Engine and the CARLA dependencies, it is recommended to use the same compiler version and C++ runtime library to compile everything. The CARLA team uses clang-8 and LLVM's libc++. Change the default clang version to compile Unreal Engine and the CARLA dependencies.
@@ -141,7 +147,10 @@ sudo update-alternatives --install /usr/bin/clang clang /usr/lib/llvm-8/bin/clan
 
 A [GitHub](https://github.com/) account will be needed, as CARLA content is organized in different repositories in there. Also, [git](https://git-scm.com/book/en/v2/Getting-Started-Installing-Git) will be used in this build guide when facilitating commands to be run in terminal.  
   
-In order to access the Unreal Engine repositories, which are set to private, create an [Unreal Engine](https://www.unrealengine.com/en-US/feed) account and connect it to a GitHub account. To do so, there is a section in Unreal Engine's profile settings under the name of __Connected accounts__. [Here](https://www.unrealengine.com/en-US/blog/updated-authentication-process-for-connecting-epic-github-accounts) is a brief explanation just in case. 
+In order to access the Unreal Engine repositories, which are set to private, create an [Unreal Engine](https://www.unrealengine.com/en-US/feed) account and connect it to a GitHub account. To do so, there is a section in Unreal Engine's profile settings under the name of __Connected accounts__. [Here](https://www.unrealengine.com/en-US/blog/updated-authentication-process-for-connecting-epic-github-accounts) is a brief explanation just in case.  
+
+!!! Warning
+    New Unreal Engine accounts need activation. After creating the account, a verification mail will be sent. Check it out, or the UE repository will be shown as non-existent in the following steps.  
 
 ---
 ## Unreal Engine
