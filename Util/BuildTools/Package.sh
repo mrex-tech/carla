@@ -16,13 +16,13 @@ DO_CLEAN_INTERMEDIATE=false
 PROPS_MAP_NAME=PropsMap
 PACKAGE_CONFIG=Shipping
 
-OPTS=`getopt -o h --long help,config:,no-zip,clean-intermediate,packages: -n 'parse-options' -- "$@"`
+OPTS=`getopt -o h --long help,config:,no-zip,clean-intermediate,packages:,python3-version: -n 'parse-options' -- "$@"`
 
 if [ $? != 0 ] ; then echo "$USAGE_STRING" ; exit 2 ; fi
 
 eval set -- "$OPTS"
 
-while true; do
+while [[ $# -gt 0 ]]; do
   case "$1" in
     --config )
       PACKAGE_CONFIG="$2"
@@ -42,7 +42,7 @@ while true; do
       exit 1
       ;;
     * )
-      break ;;
+      shift ;;
   esac
 done
 
@@ -145,6 +145,7 @@ if ${DO_CARLA_RELEASE} ; then
   copy_if_changed "./PythonAPI/util/*.py" "${DESTINATION}/PythonAPI/util/"
   copy_if_changed "./PythonAPI/util/opendrive/" "${DESTINATION}/PythonAPI/util/opendrive/"
   copy_if_changed "./PythonAPI/util/requirements.txt" "${DESTINATION}/PythonAPI/util/"
+  copy_if_changed "./PythonAPI/carla/data/*" "${DESTINATION}/PythonAPI/carla/data"
 
   copy_if_changed "./Co-Simulation/" "${DESTINATION}/Co-Simulation/"
 
